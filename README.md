@@ -1,9 +1,9 @@
 ## JWT Authentication with nodejs
 
+Practicing register and login with JWT.
+
 JWT helps us verify that the user by hashing the password and generating a JWT tokem for the user.
 This token can be used to securely authorize user to other services.
-
-Practicing register and login with JWT.
 
 ### How to run this locally
 
