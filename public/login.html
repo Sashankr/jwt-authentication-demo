@@ -24,6 +24,16 @@
       />
       <button type="submit">Login</button>
     </form>
+    <div>
+      <button>
+        <a href="/">Signup</a>
+      </button>
+    </div>
+    <div>
+      <button>
+        <a href="/change-password.html">Change Password</a>
+      </button>
+    </div>
     <script>
       const form = document.getElementById("login-form");
       form.addEventListener("submit", loginUser);
@@ -41,6 +51,11 @@
           }),
         }).then((response) => response.json());
         localStorage.setItem("token", result.data);
+        if (result.status === "ok") {
+          alert("login successfull");
+        } else {
+          alert("something went wrong", result.error);
+        }
       }
     </script>
   </body>

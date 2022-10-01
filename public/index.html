@@ -24,6 +24,16 @@
       />
       <button type="submit">Submit</button>
     </form>
+    <div>
+      <button>
+        <a href="/login.html">Login</a>
+      </button>
+    </div>
+    <div>
+      <button>
+        <a href="/change-password.html">Change Password</a>
+      </button>
+    </div>
     <script>
       const form = document.getElementById("reg-form");
       form.addEventListener("submit", registerUser);
@@ -32,7 +42,7 @@
         event.preventDefault();
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
-        const result = await fetch("/", {
+        const result = await fetch("/api/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -40,6 +50,12 @@
             password,
           }),
         }).then((response) => response.json());
+        if (result.status === "ok") {
+          alert("signup successfull");
+          window.location.replace("/login.html");
+        } else {
+          alert("something went wrong", result.error);
+        }
       }
     </script>
   </body>

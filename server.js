@@ -63,7 +63,7 @@ app.post("/api/login", async (req, res) => {
   });
 });
 
-app.post("/", async (req, res) => {
+app.post("/api/signup", async (req, res) => {
   try {
     const { username, password: plainTextPassword } = await req.body;
     const password = await bcrypt.hash(plainTextPassword, 10);
