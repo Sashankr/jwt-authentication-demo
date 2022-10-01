@@ -13,6 +13,24 @@ mongoose.connect("mongodb://localhost/jwtauth", {
 });
 const User = require("./model/user");
 
+app.post("/api/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username }).lean();
+
+  if (!user) {
+    return res.json({ status: "error", error: "Username/Password is wrong" });
+  }
+
+  if (await bcrypt.compare(password, user.password)) {
+    // username password combination available
+    return res.json({ status: "ok", data: "" });
+  }
+  return res.json({
+    status: "error",
+    error: "Username/Password is wrong",
+  });
+});
+
 app.post("/", async (req, res) => {
   try {
     const { username, password: plainTextPassword } = await req.body;
