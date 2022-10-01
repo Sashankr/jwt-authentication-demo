@@ -3,9 +3,13 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "public")));
+
+const JWT_SECRET =
+  "afjafjai#jfafafja$asjwqijr!@gdzmxcnzfgfuwqhfegcvnmclvlkfgijgvnhnb";
 
 mongoose.connect("mongodb://localhost/jwtauth", {
   useNewUrlParser: true,
@@ -23,7 +27,12 @@ app.post("/api/login", async (req, res) => {
 
   if (await bcrypt.compare(password, user.password)) {
     // username password combination available
-    return res.json({ status: "ok", data: "" });
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      JWT_SECRET
+    );
+
+    return res.json({ status: "ok", data: token });
   }
   return res.json({
     status: "error",
