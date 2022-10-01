@@ -17,6 +17,29 @@ mongoose.connect("mongodb://localhost/jwtauth", {
 });
 const User = require("./model/user");
 
+app.post("/api/change-password", async (req, res) => {
+  try {
+    const { token, newpassword } = req.body;
+    const user = jwt.verify(token, JWT_SECRET);
+    const _id = user.id;
+
+    const password = await bcrypt.hash(newpassword, 10);
+    console.log(user);
+
+    await User.updateOne(
+      { _id },
+      {
+        $set: { password },
+      }
+    );
+    res.json({ status: "ok" });
+  } catch (err) {
+    console.log(err.message);
+    res.json({ status: "error", error: err });
+    throw err;
+  }
+});
+
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username }).lean();
