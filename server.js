@@ -26,8 +26,11 @@ app.post("/", async (req, res) => {
 
     console.log("user created successfully", response);
   } catch (error) {
-    console.log(error);
-    return res.json({ status: "error" });
+    if (error.code === 11000) {
+      res.statusCode = 405;
+      return res.json({ status: "error", error: "Username already exists" });
+    }
+    throw error;
   }
 });
 
