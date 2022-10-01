@@ -1,13 +1,35 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "public")));
 
-// app.get('/',(req,res)=>{
-//     res.send()
-// })
+mongoose.connect("mongodb://localhost/jwtauth", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const User = require("./model/user");
+
+app.post("/", async (req, res) => {
+  try {
+    const { username, password: plainTextPassword } = await req.body;
+    const password = await bcrypt.hash(plainTextPassword, 10);
+
+    const response = await User.create({
+      username,
+      password,
+    });
+    res.json({ status: "ok" });
+
+    console.log("user created successfully", response);
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error" });
+  }
+});
 
 app.listen(5000, () => {
   console.log("Server running");
